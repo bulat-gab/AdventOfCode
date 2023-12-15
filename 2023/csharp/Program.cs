@@ -4,37 +4,22 @@
 
 Stopwatch sw = Stopwatch.StartNew();
 
-//var r1 = new AdventOfCode.Day1.Day1().PartOne();
-//if (r1 != 54597)
-//{
-//    Console.WriteLine("Part 1 Invalid Answer");
-//}
 
-//var r2 = new AdventOfCode2023.Day1.Day1().PartTwo();
-//Console.WriteLine("Answer Part 2: " + r2);
-//if (r2 != 281)
-//{
-//    Console.WriteLine("Part 2 Invalid Answer");
-//}
-
-
-var r1 = new AdventOfCode2023.Day9.Solution().PartOne();
+var r1 = new AdventOfCode2023.Day15.Solution().PartOne();
 Console.WriteLine("r1: " + r1);
-if (r1 != 1757008019)
+if (r1 != 515495)
 {
-    Console.WriteLine("Part 1 Invalid Answer");
+    Console.WriteLine("Invalid");
+}
+
+var r2 = new AdventOfCode2023.Day15.Solution().PartTwo();
+Console.WriteLine("r2: " + r2);
+if (r2 != 229349)
+{
+    Console.WriteLine("Invalid");
 }
 
 Console.WriteLine(  );
-
-var r2 = new AdventOfCode2023.Day9.Solution().PartTwo();
-Console.WriteLine("r2: " + r2);
-if (r2 != 995)
-{
-    Console.WriteLine("Part 2 Invalid Answer");
-}
-
-
 
 
 sw.Stop();
