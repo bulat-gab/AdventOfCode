@@ -1,7 +1,7 @@
 ﻿using AdventOfCode2023.Day7;
 using System.Collections.Immutable;
 
-namespace AdventOfCode.Day7;
+namespace AdventOfCode2023.Day7;
 public class Part2
 {
     public int PartTwo()

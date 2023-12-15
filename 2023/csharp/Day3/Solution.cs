@@ -1,4 +1,4 @@
-﻿namespace AdventOfCode.Day3;
+﻿namespace AdventOfCode2023.Day3;
 public class Solution
 {
     private const string Numbers = "0123456789";

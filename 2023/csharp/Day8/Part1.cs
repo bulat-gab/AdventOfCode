@@ -1,4 +1,4 @@
-﻿namespace AdventOfCode.Day8;
+﻿namespace AdventOfCode2023.Day8;
 public class Part1
 {
     private const char ToLeft = 'L';

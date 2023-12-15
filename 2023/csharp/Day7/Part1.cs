@@ -1,6 +1,6 @@
 ﻿using AdventOfCode2023.Day7;
 
-namespace AdventOfCode.Day7;
+namespace AdventOfCode2023.Day7;
 public class Part1
 {
     /*

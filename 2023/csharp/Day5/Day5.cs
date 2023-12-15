@@ -1,4 +1,4 @@
-﻿namespace AdventOfCode.Day5;
+﻿namespace AdventOfCode2023.Day5;
 public class Day5
 {
     private int[] TrimAndSplitStringToIntArray(string input)

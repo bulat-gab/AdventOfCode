@@ -1,6 +1,6 @@
 ﻿using static AdventOfCode2023.Utils.MathUtils;
 
-namespace AdventOfCode.Day8;
+namespace AdventOfCode2023.Day8;
 
 public class Part2
 {

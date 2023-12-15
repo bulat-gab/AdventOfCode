@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace AdventOfCode.Day2;
+namespace AdventOfCode2023.Day2;
 public class Solution
 {
     public int PartOne()

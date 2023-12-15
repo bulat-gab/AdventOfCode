@@ -1,4 +1,4 @@
-﻿namespace AdventOfCode.Day6;
+﻿namespace AdventOfCode2023.Day6;
 public class Part2
 {
     private long ParseToInt(string input)

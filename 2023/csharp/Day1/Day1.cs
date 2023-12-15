@@ -1,4 +1,4 @@
-﻿namespace AdventOfCode.Day1;
+﻿namespace AdventOfCode2023.Day1;
 public class Day1
 {
     private readonly Dictionary<string, int> numbers = new Dictionary<string, int>()
