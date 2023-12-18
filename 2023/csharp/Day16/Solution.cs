@@ -1,167 +1,65 @@
 ﻿using AdventOfCode2023.Utils;
-using static AdventOfCode2023.Day16.Solution;
-using static System.Net.Mime.MediaTypeNames;
+using System.Numerics;
 
 namespace AdventOfCode2023.Day16;
 public class Solution
 {
     private readonly string[] Lines;
 
-    public class Cell
+    public class Cell(int row, int column, char value)
     {
-        public int Row { get; set; }
-        public int Column { get; set; }
-        public char Value { get; set; }
+        public int Row { get; set; } = row;
+        public int Column { get; set; } = column;
+        public char Value { get; set; } = value;
         public bool Energized { get; set; } = false;
 
-        public List<Direction> beamDirections { get; } = [];
+        public HashSet<Complex> BeamDirections { get; } = [];
 
-        public Cell(int row, int column, char value)
+        public void Energize(Complex dir)
         {
-            Row = row;
-            Column = column;
-            Value = value;
+            Energized = true;
+            BeamDirections.Add(dir);
+        }
+
+        public void Reset()
+        {
+            Energized = false;
+            BeamDirections.Clear();
         }
     }
 
-    public record Vector(Cell Cell, Direction Beam);
+    public record Vector(Cell Cell, Complex Direction);
 
-    public record Direction(int R, int C);
-
-    private readonly Direction Right = new(0, 1);
-    private readonly Direction Left = new(0, -1);
-    private readonly Direction Downwards = new(1, 0);
-    private readonly Direction Upwards = new(-1, 0);
-
-    private readonly (int, int)[] Directions =
-[
-    (0, 1),  // Right
-    (0, -1), // Left
-    (1, 0),  // Downwards
-    (-1, 0), // Upwards
-];
+    private readonly Complex Right = Complex.ImaginaryOne; // new(0, 1);
+    private readonly Complex Left = -Complex.ImaginaryOne; // new(0, -1);
+    private readonly Complex Down = Complex.One; // = new(1, 0);
+    private readonly Complex Up = -Complex.One; //new(-1, 0);
 
     private readonly int RowsNumber;
     private readonly int ColsNumber;
 
-    private readonly HashSet<Cell> Visited = new HashSet<Cell>();
-    private List<Cell> Loop = new List<Cell>();
-
-    private Cell[,] Matrix;
+    private readonly Cell[,] Matrix;
 
     public Solution()
     {
-        Lines = File.ReadAllLines("./Day10/input.txt");
+        Lines = File.ReadAllLines("./Day16/input.txt");
         RowsNumber = Lines.Length;
         ColsNumber = Lines[0].Length;
+
+        Matrix = CreateMatrix();
     }
 
     public int PartOne()
     {
-        Matrix = CreateMatrix();
- 
-        return 0;
+        var startVector = new Vector(Matrix[0, 0], Right);
+        return CountEnergizedFrom(startVector);
     }
 
-    /// <summary>
-    ///  Returns List of next cells the beam will go.
-    ///  List contains 2 elements if the current cell is a splitter and a single element otherwise.
-    /// </summary>
-    /// <param name="current"></param>
-    /// <param name="beam"></param>
-    /// <returns></returns>
-    private List<Vector> MakeMove(Cell current, Direction direction)
+    public int PartTwo()
     {
-        // This has been visited already
-        if (current.beamDirections.Contains(direction))
-        {
-            return [];
-        }
-
-        var v = current.Value;
-        Vector? nextVector;
-        Direction newDirection = direction;
-        if (direction == Right)
-        {
-            if (v == '|')
-            {
-                var nexts = new List<Vector>();
-
-                var nextVector1 = GetNextVector(current, Downwards);
-                var nextVector2 = GetNextVector(current, Upwards);
-
-                if (nextVector1 != null)
-                {
-                    nexts.Add(nextVector1);
-                }
-                if (nextVector2 != null)
-                {
-                    nexts.Add(nextVector2);
-                }
-
-                return nexts;
-            }
-
-            if (v == '.' || v == '-')
-            {
-                newDirection = direction;
-            }
-
-            if (v == '/')
-            {
-                newDirection = Upwards;
-            }
-
-            if (v == '\\')
-            {
-                newDirection = Downwards;
-            }
-
-            nextVector = GetNextVector(current, newDirection);
-            return nextVector != null ? [nextVector] : [];
-
-            
-        }
-
-        if (direction == Left)
-        {
-            if (v == '|')
-            {
-                var nexts = new List<Vector>();
-
-                var nextVector1 = GetNextVector(current, Downwards);
-                var nextVector2 = GetNextVector(current, Upwards);
-
-                if (nextVector1 != null)
-                {
-                    nexts.Add(nextVector1);
-                }
-                if (nextVector2 != null)
-                {
-                    nexts.Add(nextVector2);
-                }
-
-                return nexts;
-            }
-        }
-    }
-
-    private Vector? GetNextVector(Cell current, Direction newDirection)
-    {
-        var nextRow = current.Row + newDirection.R;
-        var nextCol = current.Column + newDirection.C;
-
-        var isValid = MatrixUtils.IsValidCoordinate(nextRow, nextCol, RowsNumber, ColsNumber);
-
-        if (isValid)
-        {
-            var next = Matrix[nextRow, nextCol];
-            return new Vector(next, newDirection);
-        }
-        else
-        {
-            return null;
-        }
+        return GetStartVectors()
+             .Select(CountEnergizedFrom)
+             .Max();
     }
 
     private Cell[,] CreateMatrix()
@@ -179,40 +77,120 @@ public class Solution
         return matrix;
     }
 
-    
-    public int PartTwo()
+    private List<Complex> GetDirections(Cell current, Complex dir) => current.Value switch
     {
-        return 0;
+        '-' when dir == Up || dir == Down => [Left, Right],
+        '|' when dir == Right || dir == Left => [Up, Down],
+        '\\' => [new Complex(dir.Imaginary, dir.Real)],
+        '/' => [-new Complex(dir.Imaginary, dir.Real)],
+        _ => [dir]
+    };
+
+    private Vector? GetNextVector(Cell current, Complex newDirection)
+    {
+        var nextRow = current.Row + (int)newDirection.Real;
+        var nextCol = current.Column + (int)newDirection.Imaginary;
+
+        var isValid = MatrixUtils.IsValidCoordinate(nextRow, nextCol, RowsNumber, ColsNumber);
+
+        if (isValid)
+        {
+            return new Vector(Matrix[nextRow, nextCol], newDirection);
+        }
+        else
+        {
+            return null;
+        }
     }
 
-
-    //private void Print(Matrix matrix, List<Cell> visited)
-    //{
-    //    for (int r = 0; r < RowsNumber; r++)
-    //    {
-    //        for (int c = 0; c < ColsNumber; c++)
-    //        {
-    //            var cell = matrix.Cells[r, c];
-
-    //            if (visited.Contains(cell))
-    //            {
-    //                Console.ForegroundColor = ConsoleColor.Red;
-    //            }
-    //            Console.Write(cell.Value);
-    //            Console.ForegroundColor = ConsoleColor.Gray;
-    //        }
-    //        Console.WriteLine();
-    //    }
-    //}
-
-
-
-    public enum BeamDirection
+    private int CountEnergized(Cell[,] matrix)
     {
-        Right = 0,
-        Left = 1,
-        Downwards = 2,
-        Upwards= 3,
+        int count = 0;
+        for (int r = 0; r < RowsNumber; r++)
+        {
+            for (int c = 0; c < ColsNumber; c++)
+            {
+                if (matrix[r, c].Energized)
+                {
+                    count++;
+                }
+            }
+        }
+        return count;
     }
 
+    private void Print(Cell[,] matrix)
+    {
+        for (int r = 0; r < RowsNumber; r++)
+        {
+            for (int c = 0; c < ColsNumber; c++)
+            {
+                if (matrix[r, c].Energized)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.Write('#');
+                }
+                else
+                {
+                    Console.Write(matrix[r, c].Value);
+                }
+                
+                Console.ForegroundColor = ConsoleColor.Gray;
+            }
+            Console.WriteLine();
+        }
+    }
+
+    private int CountEnergizedFrom(Vector startVector)
+    {
+        var stack = new Stack<Vector>([startVector]);
+
+        while (stack.Count > 0)
+        {
+            var current = stack.Pop();
+
+            var cell = current.Cell;
+            var dir = current.Direction;
+
+            if (cell.BeamDirections.Contains(dir))
+            {
+                continue;
+            }
+            cell.Energize(dir);
+
+            foreach (var newDir in GetDirections(cell, dir))
+            {
+                var nextVector = GetNextVector(cell, newDir);
+                if (nextVector != null)
+                {
+                    stack.Push(nextVector);
+                }
+            }
+        }
+
+        int count = CountEnergized(Matrix);
+        Reset(Matrix);
+        return count;
+    }
+
+    private IEnumerable<Vector> GetStartVectors()
+    {
+        return [
+            .. Enumerable.Range(0, RowsNumber).Select(row => new Vector(Matrix[row, 0], Right)),
+            .. Enumerable.Range(0, RowsNumber).Select(row => new Vector(Matrix[row, ColsNumber - 1], Left)),
+            .. Enumerable.Range(0, ColsNumber).Select(col => new Vector(Matrix[RowsNumber - 1, col], Up)),
+            .. Enumerable.Range(0, ColsNumber).Select(col => new Vector(Matrix[0, col], Down)),
+        ];
+    }
+
+    private void Reset(Cell[,] matrix)
+    {
+        for (int r = 0; r < RowsNumber; r++)
+        {
+            for (int c = 0; c < ColsNumber; c++)
+            {
+                matrix[r, c].Reset();
+            }
+        }
+    }
 }
