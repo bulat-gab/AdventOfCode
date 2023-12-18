@@ -147,8 +147,6 @@ public class Solution
         }
 
         //boxes = boxes.Where(x => x.Count > 0).ToArray();
-
-        var sum = 0;
         var dict = new Dictionary<string, List<int>>();
         for (int boxId = 0; boxId < boxes.Length; boxId++)
         {
