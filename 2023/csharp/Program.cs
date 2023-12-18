@@ -4,16 +4,18 @@
 
 Stopwatch sw = Stopwatch.StartNew();
 
-var r1 = new AdventOfCode2023.Day4.Solution().PartOne();
+var r1 = new AdventOfCode2023.Day5.Solution().PartOne();
 Console.WriteLine("R1: " + r1);
-if (r1 != 17782)
+if (r1 != 178159714)
+//if (r1 != 35)
 {
     throw new Exception();
 }
 
-var r2 = new AdventOfCode2023.Day4.Solution().PartTwo();
+var r2 = new AdventOfCode2023.Day5.Solution().PartTwo();
 Console.WriteLine("R2: " + r2);
-if (r2 != 8477787)
+//if (r2 != 46)
+if (r2 != 100165128)
 {
     throw new Exception();
 }
