@@ -5,21 +5,8 @@
 Stopwatch sw = Stopwatch.StartNew();
 
 
-var r1 = new AdventOfCode2023.Day15.Solution().PartOne();
-Console.WriteLine("r1: " + r1);
-if (r1 != 515495)
-{
-    Console.WriteLine("Invalid");
-}
+var r = new AdventOfCode2023.Day10.Solution().PartOne();
 
-var r2 = new AdventOfCode2023.Day15.Solution().PartTwo();
-Console.WriteLine("r2: " + r2);
-if (r2 != 229349)
-{
-    Console.WriteLine("Invalid");
-}
-
-Console.WriteLine(  );
 
 
 sw.Stop();
