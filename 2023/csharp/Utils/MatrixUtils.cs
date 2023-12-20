@@ -1,4 +1,6 @@
 ﻿
+using System.Numerics;
+
 namespace AdventOfCode2023.Utils;
 public static class MatrixUtils
 {
@@ -9,5 +11,13 @@ public static class MatrixUtils
         var ans = isCol && isRow;
 
         return ans;
+    }
+
+    public static bool IsValidCoordinate(Complex coord, int rowsNumber, int colsNumber)
+    {
+        var row = (int) coord.Real;
+        var col = (int) coord.Imaginary;
+
+        return IsValidCoordinate(row, col, rowsNumber, colsNumber);
     }
 }
