@@ -27,8 +27,19 @@ Stopwatch sw = Stopwatch.StartNew();
 
 
 
-var r = new AdventOfCode2023.Day24.Solution().PartOne();
-Console.WriteLine("Result: " + r);
+var r1 = new AdventOfCode2023.Day11.Solution().PartOne();
+Console.WriteLine("Result: " + r1);
+if (r1 != 9965032)
+{
+    throw new Exception();
+}
+
+var r2 = new AdventOfCode2023.Day11.Solution().PartTwo();
+Console.WriteLine("Result: " + r2);
+if (r2 != 550358864332)
+{
+    throw new Exception();
+}
 
 sw.Stop();
 Console.WriteLine("=====================================");
